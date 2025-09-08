@@ -35,7 +35,8 @@
     <div style="width:320px; margin: 50px auto;">
         <a href="https://github.com/arajun94/webgpu_bert">GitHub</a>
         <textarea id="text"></textarea>
-        <button id="classify">モデルを読込む（283MBの通信）</button>
+        <button id="classify">モデルを読込む（283MBの通信）</button><br>
+        <span style="font-size: 12px;" id="useWebGPUPlace">可能ならWebGPUを使用（速いが不安定）<input type="checkbox" id="useWebGPU"></span>
         <div id="log"></div>
         <table>
             <tbody id="result">

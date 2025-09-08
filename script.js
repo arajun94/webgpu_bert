@@ -1,13 +1,13 @@
 import { AutoTokenizer, AutoModelForSequenceClassification} from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2';
 
-const modelName = "arajun/ruri-v3-70m-wrime-onnx";
+const modelName = "arajun/ruri-v3-30m-wrime-onnx";
 
 class Classificator{
 
-    static async loadModel(modelName) {
+    static async loadModel(modelName, options) {
         const classificator = new Classificator();
         classificator.tokenizer = await AutoTokenizer.from_pretrained(modelName);
-        classificator.model = await AutoModelForSequenceClassification.from_pretrained(modelName, {device: 'auto', dtype: 'fp32'});
+        classificator.model = await AutoModelForSequenceClassification.from_pretrained(modelName, options);
         return classificator;
     }
 
@@ -37,7 +37,9 @@ const loadModel = async()=>{
     button.innerText = "モデル読込中";
     button.disabled = true;
 
-    classificator = await Classificator.loadModel(modelName)
+    const classificatorPromise = Classificator.loadModel(modelName,{device: document.getElementById("useWebGPU").checked ?'auto' :'wasm', dtype: 'fp32'})
+    document.getElementById("useWebGPUPlace").remove();
+    classificator = await classificatorPromise;
 
     button.innerText = "感情分析だ！！！";
     button.disabled = false;
@@ -49,7 +51,7 @@ button.onclick = loadModel;
 const classify = async()=>{
     const text = document.getElementById("text").value;
 
-    const output = await classificator.classify(text)
+    const output = await classificator.classify(text);
 
     document.getElementById("result").innerHTML = "";
 
